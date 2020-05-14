@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 class NavBar extends Component {
   state = {
-    isOpen: true,
+    isOpen: false,
   };
 
   handleToggle = () => {
@@ -13,7 +13,6 @@ class NavBar extends Component {
   };
 
   render() {
-    console.log(this.state.isOpen);
     return (
       <nav className="navbar">
         <div className="nav-center">

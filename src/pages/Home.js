@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Hero from "../components/Hero";
-import Banner from "../components/Banner";
 import { Link } from "react-router-dom";
-import Services from "../components/Services";
+import Banner from "../components/Banner";
 import FeaturedRooms from "../components/FeaturedRooms";
+import Hero from "../components/Hero";
+import Services from "../components/Services";
 
 class Home extends Component {
   render() {
