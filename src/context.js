@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import items from "./data";
 
+import Client from "./Contentful";
+// Client.getEntries({
+//   content_type: "beachResort",
+// })
+//   .then((response) => console.log(response.items))
+//   .catch(console.error);
+
 const RoomContext = React.createContext();
 
 class RoomProvider extends Component {
@@ -21,29 +28,44 @@ class RoomProvider extends Component {
     pets: false,
   };
   // get data\
+  getData = async () => {
+    try {
+      let response = await Client.getEntries({
+        content_type: "beachResort",
+        order: "fields.price", // or fields.size,
+      });
+      console.log(response.items);
+      let rooms = this.formatData(response.items);
+      console.log(rooms);
+      let featuredRooms = rooms.filter((room) => room.featured === true);
+
+      let maxPrice = Math.max(...rooms.map((item) => item.price));
+      let maxSize = Math.max(...rooms.map((item) => item.size));
+
+      this.setState(() => {
+        return {
+          rooms: [...rooms],
+          featuredRooms: [...featuredRooms],
+          sortedRooms: [...rooms],
+          loading: false,
+          maxPrice: maxPrice,
+          maxSize: maxSize,
+        };
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   componentDidMount() {
-    let rooms = this.getData(items);
-    let featuredRooms = rooms.filter((room) => room.featured === true);
-
-    let maxPrice = Math.max(...rooms.map((item) => item.price));
-    let maxSize = Math.max(...rooms.map((item) => item.size));
-
-    this.setState(() => {
-      return {
-        rooms: [...rooms],
-        featuredRooms: [...featuredRooms],
-        sortedRooms: [...rooms],
-        loading: false,
-        maxPrice: maxPrice,
-        maxSize: maxSize,
-      };
-    });
+    this.getData();
   }
 
-  getData(items) {
+  formatData(items) {
     let tempItems = items.map((item) => {
       let id = item.sys.id;
       let images = item.fields.images.map((image) => image.fields.file.url);
+      // let room = { ...item.fields, id };
       let room = { ...item.fields, images, id };
       return room;
     });

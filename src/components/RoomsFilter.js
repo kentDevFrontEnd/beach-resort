@@ -45,7 +45,6 @@ function RoomsFilter({ rooms }) {
       </option>
     );
   });
-  console.log(people);
   return (
     <section className="filter-container">
       <Title title="search rooms" />
